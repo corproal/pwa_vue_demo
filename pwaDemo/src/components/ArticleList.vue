@@ -41,6 +41,7 @@
                 <img src="../assets/description/configuration.png">
                 <p>{{ item.title }}</p>
             </li>
+            <dialog-bar v-model="sendVal" type="danger" title="ここはタイトル" content="ここはコンテンツ" v-on:cancel="clickCancel()" @danger="clickDanger()" @confirm="clickConfirm()" dangerText="デリート"></dialog-bar>
         </ul>
     </div>
     <AppMenu v-if="showAppMenu" @closePage="closePage()"/>
@@ -48,11 +49,9 @@
 </template>
 
 <script>
-
 import AppMenu from '@/components/AppMenu.vue'
-
+import dialogBar from './dialog.vue';
 const NEWS_API_KEY = 'feb8db34ea39448db7e2cdf798595036';
-
 export default {
   name: 'ArticleList',
   data() {
@@ -81,11 +80,13 @@ export default {
         showAppMenu: false,
         popScrollTop: 0,
         popHeaderClass: '',
-        notificationsSupported: false
+        notificationsSupported: false,
+        sendVal: false
     }
   },
   components: {
-      AppMenu
+      AppMenu,
+      'dialog-bar': dialogBar,
   },
   created: function () {
       this.getArticleListFromServer()
@@ -137,7 +138,18 @@ export default {
                this.restoreScrolAfterPopOpen();
             } else if (tabId == 0) {
                 this.askForNotificationPermission();
+            } else if (tabId == 1) {
+            	this.sendVal = true;
             }
+        },
+        clickCancel(){
+            console.log('点击了取消');
+        },
+        clickDanger(){
+            console.log('这里是danger回调');
+        },
+        clickConfirm(){
+            console.log('点击了confirm');
         },
         bodyScroll(event) {
             event.preventDefault()
@@ -188,7 +200,6 @@ export default {
             var filterList = this.articleList.filter(function(item){return item.id == id})
             if (typeof(filterList) != "undefined" && filterList != null && filterList.length > 0) {
                 var articleInfo = filterList[0];
-
                 this.$router.push({ name: 'articleDetail', params: { 
                     title: articleInfo.title,
                     siteName: articleInfo.siteName != "" ? articleInfo.siteName : "null",
@@ -201,11 +212,9 @@ export default {
             this.articleDetail = null;
         },
         getArticleListFromServer: function() {
-
             this.articleList = [];
             this.shouldShowLoader = true;
             this.isLoading = true;
-
             var currentCategory = null;
             switch(this.cate_index) {
                 case this.Global.MENU_ID_CLINIC:
@@ -260,12 +269,11 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
     body {
     font-size: 14px;
     color: #363636;
 }
-
     h1,
     ul,
     li,
@@ -420,21 +428,18 @@ export default {
         width: 58px;
         margin: 15px 0px 0px 10px;
     }
-
     .searchInputDiv {
         width: calc(100% - 68px);
         height: 44px;
         display: inline-block;
         vertical-align: top;
     }
-
     .searchInputDiv .searchIcon {
         width: 16px;
         margin: 15px 0px 0px 16px;
         position: absolute;
         cursor: pointer;
     }
-
     .searchInputDiv .searchInput {
         width: 200px;
         height: 26px;
@@ -459,7 +464,6 @@ export default {
         float: right;
         margin: 7px 10px 7px auto;
     }
-
     .loader {
        width: 100%;
        height: 100px;
@@ -507,7 +511,6 @@ export default {
         font-weight: 400;
         line-height: 14px;
     }
-
     .auto-hide-header {
         position: fixed;
         z-index: 2;
@@ -536,11 +539,9 @@ export default {
         -ms-transform: translateY(-100%);
         transform: translateY(-100%);
     }
-
     .primary-nav {
         height: 44px;
     }
-
     .secondary-nav {
         position: relative;
         z-index: 1;
@@ -557,7 +558,6 @@ export default {
         transition: transform .5s;
         transition: transform .5s, -webkit-transform .5s;
     }
-
     .disableScroll {
         position: fixed;
     }

@@ -13,6 +13,7 @@
                                 <div class="appMenuIcon"></div>
                                 <p class="appMenuItemTitle">{{ item.title }}</p>
                             </li>
+                             <dialog-bar v-model="sendVal" type="danger" title="ここはタイトル" content="ここはコンテンツ" v-on:cancel="clickCancel()" @danger="clickDanger()" @confirm="clickConfirm()" dangerText="デリート"></dialog-bar>
                         </ul>
                     </div>
                 </div>
@@ -22,8 +23,15 @@
 </template>
 
 <script>
+import dialogBar from './dialog.vue';
+
 export default {
     name: 'AppMenu',
+    
+    components: {
+      'dialog-bar': dialogBar,
+      },
+    
     data() {
         return {
            menuList: [
@@ -40,7 +48,8 @@ export default {
                { title: "お問い合わせ"},
                { title: "お問い合わせ"},
                { title: "お問い合わせ"}
-           ]
+           ],
+           sendVal:false
         }
     },
     methods: {
@@ -48,13 +57,22 @@ export default {
             this.$emit("closePage");
         },
         gotoMenuDetail: function() {
-            
-        }
+            this.sendVal = true;
+        },
+        clickCancel(){
+            console.log('点击了取消');
+        },
+        clickDanger(){
+            console.log('这里是danger回调');
+        },
+        clickConfirm(){
+            console.log('点击了confirm');
+        },
     }
 }
 </script>
 
-<style>
+<style lang="less" scoped>
 .appMenuMask {
     position: fixed;
     z-index: 9990;
