@@ -19,7 +19,7 @@
             </ul>
         </div>
     </header>
-    <div class="page">
+    <div class="page" :class="{disableScroll: showAppMenu}">
         <ul class="article-list">
             <li class="article-item" v-for="(item, index) in articleList" @click="gotoDescription(item.id)">
                 <div class="article-img">
@@ -43,10 +43,13 @@
             </li>
         </ul>
     </div>
+    <AppMenu v-if="showAppMenu" @closePage="closePage()"/>
   </div>
 </template>
 
 <script>
+
+import AppMenu from '@/components/AppMenu.vue'
 
 const NEWS_API_KEY = 'feb8db34ea39448db7e2cdf798595036';
 
@@ -74,24 +77,20 @@ export default {
         previousTop: 0,
         isLoading: false,
         scrolling: false,
-        headerHiddenClass: "auto-hide-header"
+        headerHiddenClass: "auto-hide-header",
+        showAppMenu: false,
+        popScrollTop: 0,
+        popHeaderClass: ''
     }
+  },
+  components: {
+      AppMenu
   },
   created: function () {
       this.getArticleListFromServer()
   },
   mounted: function() {
       window.addEventListener('scroll', this.handleScroll);
-  },
-  activated: function() {
-     // if(this.scroll > 0){
-     //     window.scrollTo(0, this.scroll);
-     //     this.scroll = 0;
-     //     window.addEventListener('scroll', this.handleScroll);
-     // }
-  }, 
-  deactivated: function() {
-     // window.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
         handleScroll: function() {
@@ -103,6 +102,10 @@ export default {
           }
         },
         autoHideHeader: function() {
+            if (this.showAppMenu) {
+                this.scrolling = false;
+                return;
+            }
             var scrollDelta = 0;
             var scrollOffset = 100;
             var currentTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
@@ -121,8 +124,38 @@ export default {
                 this.getArticleListFromServer();
             }
         },
-        toggleTab: function() {
-            // TODO
+        toggleTab: function(tabId) {
+            if (tabId == 2) {
+               this.recordScroll();
+               this.showAppMenu = true;
+               this.restoreScrolAfterPopOpen();
+            }
+        },
+        bodyScroll(event) {
+            event.preventDefault()
+        },
+        recordScroll: function(){
+            this.popScrollTop = this.previousTop;
+            this.popHeaderClass = this.headerHiddenClass;
+        },
+        restoreScrolAfterPopOpen: function() {
+            this.headerHiddenClass = this.popHeaderClass;
+            document.body.style.position = 'relative';
+            document.body.style.top = '-' + this.popScrollTop + 'px';
+        },
+        restoreScrolAfterPopClose: function(){
+            //this.headerHiddenClass = this.popHeaderClass;
+            document.body.style.position = '';
+            document.body.style.top = '0';
+            this.$nextTick(() => {
+                window.scrollTo(1, this.previousTop);
+                //document.documentElement.scrollTop = this.previousTop;
+                //document.body.scrollTop = this.previousTop;
+            });
+        },
+        closePage: function() {
+            this.showAppMenu = false;
+            this.restoreScrolAfterPopClose();
         },
         gotoDescription: function(id) {
             var filterList = this.articleList.filter(function(item){return item.id == id})
@@ -418,7 +451,7 @@ export default {
         position: fixed;
         left: 0px;
         bottom: 0px;
-        z-index: 9999;
+        z-index: 9989;
         box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.2);
     }
     
@@ -500,4 +533,7 @@ export default {
         transition: transform .5s, -webkit-transform .5s;
     }
 
+    .disableScroll {
+        position: fixed;
+    }
 </style>
