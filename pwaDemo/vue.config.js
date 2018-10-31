@@ -1,16 +1,10 @@
 module.exports = {
   pwa: {
     name: 'Pwa_Demo',
+    workboxPluginMode: 'InjectManifest',
     workboxOptions: {
-      include: [/\.html$/, /\.js$/],
-      skipWaiting: true,
-      clientsClaim: true,
-      runtimeCaching: [
-          {
-              urlPattern: new RegExp('^https://newsapi\.org/'),
-              handler: 'networkFirst',
-          }
-      ]
+      swSrc: 'src/service-worker.js',
+      include: [/\.html$/, /\.js$/, /\.css$/],
     },
     appleMobileWebAppCapable: 'yes',
     

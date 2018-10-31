@@ -80,7 +80,8 @@ export default {
         headerHiddenClass: "auto-hide-header",
         showAppMenu: false,
         popScrollTop: 0,
-        popHeaderClass: ''
+        popHeaderClass: '',
+        notificationsSupported: false
     }
   },
   components: {
@@ -88,6 +89,11 @@ export default {
   },
   created: function () {
       this.getArticleListFromServer()
+      
+      // notification support check
+      if ('Notification' in window && 'serviceWorker' in navigator) {
+          this.notificationsSupported = true;
+      }
   },
   mounted: function() {
       window.addEventListener('scroll', this.handleScroll);
@@ -129,6 +135,8 @@ export default {
                this.recordScroll();
                this.showAppMenu = true;
                this.restoreScrolAfterPopOpen();
+            } else if (tabId == 0) {
+                this.askForNotificationPermission();
             }
         },
         bodyScroll(event) {
@@ -144,18 +152,37 @@ export default {
             document.body.style.top = '-' + this.popScrollTop + 'px';
         },
         restoreScrolAfterPopClose: function(){
-            //this.headerHiddenClass = this.popHeaderClass;
             document.body.style.position = '';
             document.body.style.top = '0';
             this.$nextTick(() => {
                 window.scrollTo(1, this.previousTop);
-                //document.documentElement.scrollTop = this.previousTop;
-                //document.body.scrollTop = this.previousTop;
             });
         },
         closePage: function() {
             this.showAppMenu = false;
             this.restoreScrolAfterPopClose();
+        },
+        askForNotificationPermission: function() {
+            if (this.notificationsSupported) {
+                console.log('sw support Notification');
+                Notification.requestPermission(result => {
+                    if (result == 'granted') {
+                        this.showNotification();
+                    }
+                });
+            }
+        },
+        showNotification: function() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.ready
+                    .then(swreg => swreg.showNotification('Notifications granted', {
+                        body: 'Here is a first notification',
+                        icon: '/img/icons/android-chrome-192x192.png',
+                        image: '../assets/description/index_logo.png',
+                        vibrate: [300, 200, 300],
+                        badge: '/img/icons/android-chrome-192x192.png'
+                    }))
+            }
         },
         gotoDescription: function(id) {
             var filterList = this.articleList.filter(function(item){return item.id == id})
@@ -168,8 +195,6 @@ export default {
                     openDate: articleInfo.openDate != "" ? articleInfo.openDate : "null",
                     description: articleInfo.description != "" ? articleInfo.description : "null" }
                 })
-
-                //this.articleDetail = articleInfo;
             }
         },
         showArticleList: function() {
