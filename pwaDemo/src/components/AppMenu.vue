@@ -60,13 +60,13 @@ export default {
             this.sendVal = true;
         },
         clickCancel(){
-            console.log('点击了取消');
+            console.log('点蜃ｻ了取消');
         },
         clickDanger(){
-            console.log('这里是danger回调');
+            console.log('霑剽｢是danger回隹茀');
         },
         clickConfirm(){
-            console.log('点击了confirm');
+            console.log('点蜃ｻ了confirm');
         },
     }
 }
@@ -145,6 +145,20 @@ export default {
     border-bottom: 1px solid #7D7D7D;
     overflow: hidden;
     cursor: pointer;
+}
+
+.appMenuItem .appMenuIcon {
+    width: 16px;
+    height: 16px;
+    margin: auto 10px;
+    background-color: #7D7D7D;
+    border-radius: 8px;
+}
+
+.appMenuItem .appMenuItemTitle {
+    line-height: 20px;
+    font-size: 16px;
+    margin: auto 0px;
 }
 
 .appMenuModal-enter {
