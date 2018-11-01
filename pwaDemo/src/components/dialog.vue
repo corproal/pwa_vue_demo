@@ -94,8 +94,8 @@ export default {
         background: rgba(0, 0, 0, 0.6);
         z-index: 9999;
     		.dialog-container{
-            	width: 400px;
-           		height: 180px;
+            	width: 90%;
+           		height: 40%;
             	background: #ffffff;
             	position: absolute;
             	top: 50%;
@@ -133,8 +133,7 @@ export default {
             }
             .btns{
                 width: 100%;
-                height: 60px;
-                // line-height: 60px;
+                height: 35px;
                 position: absolute;
                 bottom: 0;
                 left: 0;
@@ -143,13 +142,13 @@ export default {
                 box-sizing: border-box;
                 & > div{
                     display: inline-block;
-                    height: 40px;
-                    line-height: 40px;
-                    padding: 0 14px;
+                    height: 60%;
+                    line-height: 25px;
+                    padding: 0 10px;
                     color: #ffffff;
                     background: #f1f1f1;
-                    border-radius: 8px;
-                    margin-right: 12px;
+                    border-radius: 6px;
+                    margin-right: 8px;
                     cursor: pointer;
                 }
                 .default-btn{
