@@ -60,19 +60,16 @@ export default {
             this.sendVal = true;
         },
         clickCancel(){
-            console.log('点蜃ｻ了取消');
         },
         clickDanger(){
-            console.log('霑剽｢是danger回隹茀');
         },
         clickConfirm(){
-            console.log('点蜃ｻ了confirm');
         },
     }
 }
 </script>
 
-<style lang="less" scoped>
+<style scoped>
 .appMenuMask {
     position: fixed;
     z-index: 9990;

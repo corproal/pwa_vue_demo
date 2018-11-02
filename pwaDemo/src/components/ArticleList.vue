@@ -139,17 +139,14 @@ export default {
             } else if (tabId == 0) {
                 this.askForNotificationPermission();
             } else if (tabId == 1) {
-            	this.sendVal = true;
+                this.sendVal = true;
             }
         },
         clickCancel(){
-            console.log('点击了取消');
         },
         clickDanger(){
-            console.log('这里是danger回调');
         },
         clickConfirm(){
-            console.log('点击了confirm');
         },
         bodyScroll(event) {
             event.preventDefault()
@@ -176,7 +173,6 @@ export default {
         },
         askForNotificationPermission: function() {
             if (this.notificationsSupported) {
-                console.log('sw support Notification');
                 Notification.requestPermission(result => {
                     if (result == 'granted') {
                         this.showNotification();
@@ -269,7 +265,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style scoped>
     body {
     font-size: 14px;
     color: #363636;
@@ -291,27 +287,11 @@ export default {
         cursor: pointer;
     }
     
-/*  
-    header {
-        position: relative;
-        height: 44px;
-        line-height: 44px;
-        background-color: #fff;
-        border-bottom: 1px solid #ddd;
-    }
-*/
     .header-edit {
         float: right;
         padding: 0 10px;
         cursor: pointer;
     }
-/*
-    .tab-wrap {
-        height: 40px;
-        overflow: hidden;
-        border-bottom: 1px solid #EEAD0E;
-    }
-*/
     .cate-tab {
         white-space: nowrap;
         overflow-x: scroll;
@@ -414,11 +394,6 @@ export default {
         border-radius: 4px;
         overflow: hidden;
     }
-/*
-    .medyHeader {
-        height: 44px;
-    }
-*/
     .medyLogoDiv {
         display: inline-block;
         height: 44px;
